@@ -1,0 +1,34 @@
+import { Character } from "../types";
+import BackButton from "../components/BackButton";
+
+async function getCharacters(): Promise<Character[]> {
+  const res = await fetch("https://swapi.info/api/people");
+  const data = await res.json();
+  return data;
+}
+
+export default async function Characters() {
+  const characters = await getCharacters();
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-16">
+        <BackButton />
+        <h1 className="text-4xl font-bold mb-8 text-yellow-400">
+          Star Wars Characters
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {characters.map((character: Character) => (
+            <div key={character.name} className="p-6 bg-gray-800 rounded-lg">
+              <h2 className="text-2xl font-semibold mb-2">{character.name}</h2>
+              <p className="text-gray-300">
+                Birth Year: {character.birth_year}
+              </p>
+              <p className="text-gray-300">Height: {character.height}cm</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
